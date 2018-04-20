@@ -8,6 +8,7 @@ header("Content-Type: text/html");
 
 $host = GET('h');
 $plugin = GET('p');
+$seconds = GET('s') ?? $CONFIG['time_range']['default'];
 
 $selected_plugins = !$plugin ? $CONFIG['overview'] : array($plugin);
 
@@ -28,6 +29,19 @@ if (!strlen($host) || !$plugins = collectd_plugins($host)) {
 }
 
 plugins_list($host, $selected_plugins);
+
+print '<ul class="time-range">' . "\n";
+foreach($CONFIG['term'] as $key => $s) {
+	$args = $_GET;
+	$args['s'] = $s;
+	$selected = selected_timerange($seconds, $s);
+	printf('<li><a %s href="%s%s">%s</a></li>'."\n",
+		$selected,
+		htmlentities($CONFIG['weburl']),
+		htmlentities(build_url('host.php', $args)),
+		htmlentities($key));
+}
+print "</ul>\n";
 
 echo '<div class="graphs">';
 foreach ($selected_plugins as $selected_plugin) {

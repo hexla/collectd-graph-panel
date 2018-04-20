@@ -144,10 +144,11 @@ EOT;
 function plugin_header($host, $plugin) {
 	global $CONFIG;
 
-	printf("<h2><a href=\"%shost.php?h=%s&amp;p=%s\">%s</a></h2>\n",
+	printf("<h2><a href=\"%shost.php?h=%s&amp;p=%s&amp;s=%d\">%s</a></h2>\n",
 		htmlentities($CONFIG['weburl']),
 		urlencode($host),
 		urlencode($plugin),
+		GET('s') ?? $CONFIG['time_range']['default'],
 		htmlentities($plugin));
 }
 
@@ -160,20 +161,24 @@ function plugins_list($host, $selected_plugins = array()) {
 	echo '<h2>Plugins</h2>';
 	echo '<ul>';
 
-	printf("<li><a %shref=\"%shost.php?h=%s\">overview</a></li>\n",
+	$time = GET('s') ?? $CONFIG['time_range']['default'];
+
+	printf("<li><a %shref=\"%shost.php?h=%s&amp;s=%d\">overview</a></li>\n",
 		selected_overview($selected_plugins),
 		htmlentities($CONFIG['weburl']),
-		urlencode($host)
+		urlencode($host),
+		$time
 	);
 
 	# first the ones defined as ordered
 	foreach($CONFIG['overview'] as $plugin) {
 		if (in_array($plugin, $plugins)) {
-			printf("<li><a %shref=\"%shost.php?h=%s&amp;p=%s\">%s</a></li>\n",
+			printf("<li><a %shref=\"%shost.php?h=%s&amp;p=%s&amp;s=%d\">%s</a></li>\n",
 				selected_plugin($plugin, $selected_plugins),
 				htmlentities($CONFIG['weburl']),
 				urlencode($host),
 				urlencode($plugin),
+				$time,
 				htmlentities($plugin)
 			);
 		}
@@ -182,11 +187,12 @@ function plugins_list($host, $selected_plugins = array()) {
 	# other plugins
 	foreach($plugins as $plugin) {
 		if (!in_array($plugin, $CONFIG['overview'])) {
-			printf("<li><a %shref=\"%shost.php?h=%s&amp;p=%s\">%s</a></li>\n",
+			printf("<li><a %shref=\"%shost.php?h=%s&amp;p=%s&amp;s=%d\">%s</a></li>\n",
 				selected_plugin($plugin, $selected_plugins),
 				htmlentities($CONFIG['weburl']),
 				urlencode($host),
 				urlencode($plugin),
+				$time,
 				htmlentities($plugin)
 			);
 		}
@@ -352,9 +358,9 @@ function graphs_from_plugin($host, $plugin, $overview=false) {
 
 		$items['h'] = $host;
 
-		$time = array_key_exists($plugin, $CONFIG['time_range'])
+		$time = GET('s') ?? (array_key_exists($plugin, $CONFIG['time_range'])
 			? $CONFIG['time_range'][$plugin]
-			: $CONFIG['time_range']['default'];
+			: $CONFIG['time_range']['default']);
 
 		if ($CONFIG['graph_type'] == 'canvas') {
 			chdir($CONFIG['webdir']);
