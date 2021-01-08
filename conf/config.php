@@ -38,13 +38,13 @@ $CONFIG['showmem'] = false;
 $CONFIG['showtime'] = false;
 
 $CONFIG['term'] = array(
-	'2hour'	 => 3600 * 2,
-	'8hour'	 => 3600 * 8,
-	'day'	 => 86400,
-	'week'	 => 86400 * 7,
-	'month'	 => 86400 * 31,
-	'quarter'=> 86400 * 31 * 3,
-	'year'	 => 86400 * 365,
+	'2hour'      => 3600 * 2,
+	'8hour'      => 3600 * 8,
+	'day'        => 86400,
+	'week'       => 86400 * 7,
+	'month'      => 86400 * 31,
+	'quarter'    => 86400 * 31 * 3,
+	'year'       => 86400 * 365,
 );
 
 # show graphs in bits or bytes
