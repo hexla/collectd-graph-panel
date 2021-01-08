@@ -13,7 +13,7 @@ function collectd_hosts() {
 
 	$dir = array_diff(scandir($CONFIG['datadir']), array('.', '..'));
 	foreach($dir as $k => $v) {
-		if(!is_dir($CONFIG['datadir'].'/'.$v))
+		if(!is_dir($CONFIG['datadir'].'/'.$v) || is_link($CONFIG['datadir'].'/'.$v))
 			unset($dir[$k]);
 	}
 
