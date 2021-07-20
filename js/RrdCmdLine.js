@@ -336,6 +336,9 @@ RrdCmdLine.prototype = {
 				else
 					throw "invalid argument for --units: "+value;
 				break;
+			case 'left-axis-format':
+				this.graph.first_axis_format = value;
+				break;
 			case 'right-axis':
 				if (index === -1)
 					throw "invalid right-axis format expected scale:shift";

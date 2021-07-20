@@ -778,6 +778,7 @@ var RrdGraph = function (gfx, data)
 	this.zoom = 1;
 	this.grid_dash_on = 1;
 	this.grid_dash_off = 1;
+	this.first_axis_format = null; /* format for the numbers on the first axis */
 	this.second_axis_scale = 0; /* relative to the first axis (0 to disable) */
 	this.second_axis_shift = 0; /* how much is it shifted vs the first axis */
 	this.second_axis_legend = null; /* label to put on the seond axis */
@@ -1959,23 +1960,27 @@ RrdGraph.prototype.horizontal_log_grid = function ()
 		this.gfx.line(X1, Y0, X1 + 2, Y0, this.MGRIDWIDTH, this.GRC.MGRID);
 		this.gfx.dashed_line(X0 - 2, Y0, X1 + 2, Y0, this.MGRIDWIDTH, this.GRC.MGRID, this.grid_dash_on, this.grid_dash_off);
 		/* label */
-		if (this.force_units_si) {
-			var scale;
-			var pvalue;
-			var symbol;
+		if (!this.first_axis_format){
+			if (this.force_units_si) {
+				var scale;
+				var pvalue;
+				var symbol;
 
-			scale = Math.floor(val_exp / 3.0);
-			if (value >= 1.0) pvalue = Math.pow(10.0, val_exp % 3);
-			else pvalue = Math.pow(10.0, ((val_exp + 1) % 3) + 2);
-			pvalue *= yloglab[mid][flab];
+				scale = Math.floor(val_exp / 3.0);
+				if (value >= 1.0) pvalue = Math.pow(10.0, val_exp % 3);
+				else pvalue = Math.pow(10.0, ((val_exp + 1) % 3) + 2);
+				pvalue *= yloglab[mid][flab];
 
-			if (((scale + this.si_symbcenter) < this.si_symbol.length) && ((scale + this.si_symbcenter) >= 0))
-				symbol = this.si_symbol[scale + this.si_symbcenter];
-			else
-				symbol = '?';
-			graph_label = sprintf("%3.0f %s", pvalue, symbol);
+				if (((scale + this.si_symbcenter) < this.si_symbol.length) && ((scale + this.si_symbcenter) >= 0))
+					symbol = this.si_symbol[scale + this.si_symbcenter];
+				else
+					symbol = '?';
+				graph_label = sprintf("%3.0f %s", pvalue, symbol);
+			} else {
+				graph_label = sprintf("%3.0e", value);
+			}
 		} else {
-			graph_label = sprintf("%3.0e", value);
+			graph_label = sprintf(this.first_axis_format,value,"");
 		}
 		if (this.second_axis_scale != 0){
 			var graph_label_right;
@@ -2310,27 +2315,31 @@ RrdGraph.prototype.draw_horizontal_grid = function()
 		YN = this.ytr(this.ygrid_scale.gridstep * (i + 1));
 		if (Math.floor(Y0 + 0.5) >= this.yorigin - this.ysize && Math.floor(Y0 + 0.5) <= this.yorigin) {
 			if (i % this.ygrid_scale.labfact === 0 || (nlabels === 1 && (YN < this.yorigin - this.ysize || YN > this.yorigin))) {
-				if (this.symbol === ' ') {
-					if (this.alt_ygrid) {
-						graph_label = sprintf(this.ygrid_scale.labfmt, scaledstep * i); // FIXME
-					} else {
-						if (MaxY < 10) {
-							graph_label = sprintf("%4.1f", scaledstep * i);
+				if (!this.first_axis_format) {
+					if (this.symbol === ' ') {
+						if (this.alt_ygrid) {
+							graph_label = sprintf(this.ygrid_scale.labfmt, scaledstep * i); // FIXME
 						} else {
-							graph_label = sprintf("%4.0f", scaledstep * i);
+							if (MaxY < 10) {
+								graph_label = sprintf("%4.1f", scaledstep * i);
+							} else {
+								graph_label = sprintf("%4.0f", scaledstep * i);
+							}
+						}
+					} else {
+						sisym = (i === 0 ? ' ' : this.symbol);
+						if (this.alt_ygrid) {
+							graph_label = sprintf(this.ygrid_scale.labfmt, scaledstep * i, sisym);
+						} else {
+							if (MaxY < 10) {
+								graph_label = sprintf("%4.1f %s", scaledstep * i, sisym);
+							} else {
+								graph_label = sprintf("%4.0f %s", scaledstep * i, sisym);
+							}
 						}
 					}
 				} else {
-					sisym = (i === 0 ? ' ' : this.symbol);
-					if (this.alt_ygrid) {
-						graph_label = sprintf(this.ygrid_scale.labfmt, scaledstep * i, sisym);
-					} else {
-						if (MaxY < 10) {
-							graph_label = sprintf("%4.1f %s", scaledstep * i, sisym);
-						} else {
-							graph_label = sprintf("%4.0f %s", scaledstep * i, sisym);
-						}
-					}
+					graph_label = sprintf(this.first_axis_format, scaledstep * i, "");
 				}
 				nlabels++;
 				if (this.second_axis_scale != 0){
