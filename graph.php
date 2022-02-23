@@ -102,6 +102,9 @@ if (isset($plugin_json[$type]['legend'])) {
 		$obj->legend[$rrd] = isset($property['name']) ? $property['name'] : $rrd;
 		if (isset($property['color']))
 			$obj->colors[$rrd] = $property['color'];
+		if ($property['hide'] ?? false) {
+			$obj->hide[] = $rrd;
+		}
 	}
 }
 

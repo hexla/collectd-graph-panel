@@ -211,6 +211,7 @@ class Type_Base {
 		$this->colors = $colors + $this->colors;
 
 		$graphoptions = $this->rrd_gen_graph();
+		error_log(json_encode($graphoptions));
 		# $shellcmd contains escaped rrdtool arguments
 		$shellcmd = array();
 		foreach ($graphoptions as $arg)
@@ -308,6 +309,10 @@ class Type_Base {
 	}
 
 	function rrd_get_sources() {
+		# hide unwanted sources
+		if (is_array($this->hide ?? null)) {
+			$this->tinstances = array_diff($this->tinstances, $this->hide);
+		}
 		# is the source spread over multiple files?
 		if (is_array($this->files) && count($this->files)>1) {
 			# and must it be ordered?
