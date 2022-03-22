@@ -280,30 +280,27 @@ class Type_Base {
 	}
 
 	function rrd_options() {
-		$rrdgraph = array();
-		foreach($this->rrdtool_opts as $opt)
-			$rrdgraph[] = $opt;
+		# defaults, any later occurance will override
+		$rrdgraph = array(
+			'-l', 0,
+			'-w', is_numeric($this->width) ? $this->width : 400,
+			'-h', is_numeric($this->height) ? $this->height : 175,
+			'-t', $this->rrd_title,
+			'-s', sprintf('e-%d', is_numeric($this->seconds) ? $this->seconds : 86400),
+		);
 		if ($this->graph_smooth)
 			$rrdgraph[] = '-E';
 		if ($this->base) {
 			$rrdgraph[] = '--base';
 			$rrdgraph[] = $this->base;
 		}
-		if (array_search('-l', $rrdgraph) === false) {
-			$rrdgraph[] = '-l';
-			$rrdgraph[] = '0';
-		}
-		$rrdgraph = array_merge($rrdgraph, array(
-			'-w', is_numeric($this->width) ? $this->width : 400,
-			'-h', is_numeric($this->height) ? $this->height : 175,
-			'-t', $this->rrd_title
-		));
 		if ($this->rrd_vertical) {
 			$rrdgraph[] = '-v';
 			$rrdgraph[] = $this->rrd_vertical;
 		}
-		$rrdgraph[] = '-s';
-		$rrdgraph[] = sprintf('e-%d', is_numeric($this->seconds) ? $this->seconds : 86400);
+
+		foreach($this->rrdtool_opts as $opt)
+			$rrdgraph[] = $opt;
 
 		return $rrdgraph;
 	}
