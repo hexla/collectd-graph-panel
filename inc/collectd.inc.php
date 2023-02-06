@@ -56,6 +56,9 @@ function collectd_plugindata($host, $plugin=NULL) {
 
 	$data = array();
 	foreach($files as $item) {
+		if ($item[0] == '.') {
+			continue;
+		}
 		preg_match('`
 			(?P<p>[\w_]+)      # plugin
 			(?:(?<=varnish)(?:\-(?P<c>[\w]+)))? # category
