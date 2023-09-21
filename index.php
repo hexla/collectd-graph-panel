@@ -8,11 +8,16 @@ header("Content-Type: text/html");
 
 html_start();
 
+if(!$ahosts = collectd_hosts()) {
+	printf('<p class="warn">Error: No Collectd hosts found in <em>%s</em></p>', $CONFIG['datadir']);
+}
+
 $h = array();
 
 # show all categorized hosts
 if (isset($CONFIG['cat']) && is_array($CONFIG['cat'])) {
 	foreach($CONFIG['cat'] as $cat => $hosts) {
+		error_log($cat);
 
 		if(is_array($hosts)) {
 			host_summary($cat, $hosts);
@@ -20,7 +25,6 @@ if (isset($CONFIG['cat']) && is_array($CONFIG['cat'])) {
 		} else {
 			// Asume regexp
 			$regexp = $hosts;
-			$ahosts = collectd_hosts();
 			$rhosts = array();
 
 			foreach($ahosts as $host) {
@@ -38,9 +42,7 @@ if (isset($CONFIG['cat']) && is_array($CONFIG['cat'])) {
 
 
 # search for uncategorized hosts
-if(!$chosts = collectd_hosts())
-	printf('<p class="warn">Error: No Collectd hosts found in <em>%s</em></p>', $CONFIG['datadir']);
-$uhosts = array_diff($chosts, $h);
+$uhosts = array_diff($ahosts, $h);
 
 # show all uncategorized hosts
 if ($uhosts) {
