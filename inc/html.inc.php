@@ -18,7 +18,7 @@ function html_start() {
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>CGP{$path}</title>
+	<title>{$path} - CGP</title>
 	<meta name="viewport" content="width=device-width">
 	<link rel="stylesheet" href="{$html_weburl}layout/style.css" type="text/css">
 	<link rel="stylesheet" href="{$html_weburl}layout/style-b.css" type="text/css" media="(max-width: 1000px),(max-device-width: 1000px) and (orientation: portrait),(max-device-width: 767px) and (orientation: landscape)">
