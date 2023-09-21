@@ -250,7 +250,7 @@ function host_summary($cat, $hosts) {
 			require_once 'type/Default.class.php';
 			$load = array('h' => $host, 'p' => 'load', 't' => 'load');
 			$obj = new Type_Default($CONFIG, $load);
-			$obj->collectd_flush();
+			collectd_flush($obj->identifiers);
 
 			$rrd_info = $rrd->rrd_info($CONFIG['datadir'].'/'.$host.'/load/load.rrd');
 
