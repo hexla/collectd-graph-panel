@@ -321,19 +321,13 @@ function host_summary($cat, $hosts) {
 
 
 function breadcrumbs() {
-	$path = '';
-	if (GET('h'))
-		$path .= ' - '.ucfirst(GET('h'));
-	if (GET('p'))
-		$path .= ' - '.ucfirst(GET('p'));
-	if (GET('pi'))
-		$path .= ' - '.GET('pi');
-	if (GET('t') && GET('p') && GET('t') != GET('p'))
-		$path .= ' - '.GET('t');
-	if (GET('ti'))
-		$path .= ' - '.GET('ti');
-
-	return $path;
+	return join(' - ', array_filter([
+		ucfirst(GET('h')),
+		ucfirst(GET('p')),
+		GET('pi'),
+		(GET('t') && GET('p') && GET('t') != GET('p')) ? ucfirst(GET('t')) : null,
+		ucfirst(GET('ti')),
+	]));
 }
 
 # generate graph url's for a plugin of a host
