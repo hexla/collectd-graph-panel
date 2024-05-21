@@ -181,7 +181,7 @@ function collectd_flush($identifier) {
 	}
 
 	if ($CONFIG['flush_type'] == 'collectd'){
-		foreach(array_chunk($identifier, 25) as $chunk) {
+		foreach(array_chunk($identifier, 10) as $chunk) {
 			$cmd = 'FLUSH';
 			foreach($chunk as $val) {
 				$cmd .= ' identifier="' . $val . '"';
