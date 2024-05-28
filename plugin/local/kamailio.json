@@ -1,0 +1,73 @@
+{
+	"kam_shmem_size": {
+		"title": "kamailio shared memory utilization ({{PI}}) ",
+		"vertical": "Bytes",
+		"type": "stacked",
+		"legend": {
+			"free": {
+				"name": "Free",
+				"color": "00e000"
+			},
+			"used": {
+				"name": "Used",
+				"color": "ff0000"
+			}
+		}
+	},
+	"kam_pkgmem_size": {
+		"title": "kamailio package memory utilization ({{PI}}) ",
+		"vertical": "Bytes",
+		"type": "stacked",
+		"legend": {
+			"free": {
+				"name": "Free",
+				"color": "00e000"
+			},
+			"used": {
+				"name": "Used",
+				"color": "ff0000"
+			}
+		}
+	},
+	"kam_sl_replies": {
+		"title": "kamailio stateless replies ({{PI}}) ",
+		"type": "stacked"
+	},
+	"kam_tmx_replies": {
+		"title": "kamailio statefull replies ({{PI}}) ",
+		"type": "stacked",
+		"legend": {
+			"6xx" : {
+				"color": "ff00ff"
+			},
+			"5xx" : {
+				"color": "ff0000"
+			},
+			"4xx" : {
+				"color": "0000ff"
+			},
+			"3xx" : {
+				"color": "008000"
+			},
+			"2xx" : {
+				"color": "00ff00"
+			}
+		}
+	},
+	"kam_tmx_transaction_types": {
+		"title": "kamailio transactions ({{PI}}) ",
+		"type": "default"
+	},
+	"kam_tmx_transactions": {
+		"title": "kamailio transactions ({{PI}}) ",
+		"type": "stacked",
+		"legend": {
+			"waiting" : {
+				"color": "0000ff"
+			},
+			"active" : {
+				"color": "00ff00"
+			}
+		}
+	}
+}

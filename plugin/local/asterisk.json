@@ -1,0 +1,18 @@
+{
+	"ast_chan_accounts": {
+		"title": "Accounts ({{PI}}) on {{HOST}}",
+		"vertical": "Number",
+		"type": "io",
+		"legend": {
+			"in": {
+				"name": "In",
+				"color": "0000ff"
+			},
+			"out": {
+				"name": "Out",
+				"color": "00b000"
+			}
+		},
+		"legend_format": "%5.1lf%s"
+	}
+}
